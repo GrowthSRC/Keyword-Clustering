@@ -4,15 +4,17 @@ import hashlib
 import os
 import app  # Import the app module
 
+# Hash the password for security
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
+# Create a directory for the user to store files
 def create_user_directory(email):
-    # Create a directory for the user to store files
     user_directory = f"./user_data/{email}"
     os.makedirs(user_directory, exist_ok=True)
     return user_directory
 
+# Create a new user in the database
 def create_user(first_name, last_name, phone_no, email, password):
     conn = sqlite3.connect('allusers.db')
     c = conn.cursor()
@@ -28,6 +30,7 @@ def create_user(first_name, last_name, phone_no, email, password):
         st.success("User registered successfully!")
     conn.close()
 
+# Check if the login credentials are correct
 def check_login(email, password):
     conn = sqlite3.connect('allusers.db')
     c = conn.cursor()
@@ -38,6 +41,7 @@ def check_login(email, password):
         return True
     return False
 
+# Get user information after login
 def get_user_info(email):
     conn = sqlite3.connect('allusers.db')
     c = conn.cursor()
@@ -46,6 +50,7 @@ def get_user_info(email):
     conn.close()
     return user_info
 
+# Login function
 def login():
     st.title("Login")
     email = st.text_input("Email")
@@ -54,6 +59,7 @@ def login():
         if check_login(email, password):
             user_info = get_user_info(email)
             if user_info:
+                # Store login details in session state
                 st.session_state.logged_in = True
                 st.session_state.user_id = user_info[0]
                 st.session_state.full_name = f"{user_info[1]} {user_info[2]}"
@@ -62,6 +68,7 @@ def login():
         else:
             st.error("Invalid email or password")
 
+# Registration function
 def register():
     st.title("Register")
     col1, col2 = st.columns(2)
@@ -82,13 +89,17 @@ def register():
         else:
             st.error("Passwords do not match")
 
+# Main function
 def main():
+    # Initialize session state variables if not already done
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
 
+    # Check if user is logged in
     if st.session_state.logged_in:
         app.main()  # Call the main function from app.py
     else:
+        # Show login or registration form
         menu = ["Login", "Register"]
         choice = st.sidebar.selectbox("Menu", menu)
 
