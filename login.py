@@ -64,7 +64,8 @@ def login():
                 st.session_state.user_id = user_info[0]
                 st.session_state.full_name = f"{user_info[1]} {user_info[2]}"
                 st.session_state.user_directory = user_info[3]
-                st.experimental_rerun()  # This will reload the page
+                st.write("Login successful! Redirecting...")
+                st.stop()  # Stop further execution to avoid rerun errors
         else:
             st.error("Invalid email or password")
 
