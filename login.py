@@ -89,24 +89,4 @@ def register():
         else:
             st.error("Passwords do not match")
 
-# Main function
-def main():
-    # Initialize session state variables if not already done
-    if "logged_in" not in st.session_state:
-        st.session_state.logged_in = False
 
-    # Check if user is logged in
-    if st.session_state.logged_in:
-        app.main()  # Call the main function from app.py
-    else:
-        # Show login or registration form
-        menu = ["Login", "Register"]
-        choice = st.sidebar.selectbox("Menu", menu)
-
-        if choice == "Login":
-            login()
-        elif choice == "Register":
-            register()
-
-if __name__ == "__main__":
-    main()
